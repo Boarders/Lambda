@@ -1,0 +1,112 @@
+cabal-version:      2.4
+category:           Benchmarks
+build-type:         Simple
+name:               Lambda
+synopsis:           Various implementations of lambda calculus
+version:            0.1.0
+
+
+executable pige-playground
+
+
+  main-is:
+    Main.hs
+
+  ghc-options:
+    -threaded -rtsopts
+
+  hs-source-dirs:
+    app/
+
+  build-depends:
+      base
+    , Lambda-Parser
+    , Lambda-Expr
+    , ansi-terminal
+        ^>= 0.9.1
+    , haskeline
+        ^>= 0.7.5.0
+    , megaparsec
+        ^>= 7.0.5
+    , text
+        ^>=1.2.3
+    , transformers
+        ^>= 0.5.6.2
+
+
+
+Library Lambda-Expr
+
+  ghc-options:
+    -threaded 
+    -rtsopts 
+    -O2
+    -fobject-code 
+    -Wall  
+    -Wincomplete-patterns
+
+  hs-source-dirs:
+    src/Lambda-Expr
+
+  build-depends:
+      base
+    , Lambda-Parser
+    , megaparsec
+        ^>= 7.0.5
+    , text
+        ^>=1.2.3
+
+  exposed-modules:
+      Untyped.Expression
+      Untyped.PrettyPrint
+
+  default-language:
+    Haskell2010
+
+Library Lambda-Parser
+
+  ghc-options:
+    -threaded -rtsopts -O2 -fobject-code -Wall
+
+  hs-source-dirs:
+    src/Lambda-Parser
+
+  build-depends:
+      base
+    , megaparsec
+        ^>= 7.0.5
+    , text
+        ^>=1.2.3
+
+  Exposed-modules:
+      Parser.Lambda.Untyped
+
+
+  other-modules:
+
+  default-language:
+    Haskell2010
+
+
+test-suite parser-tests
+
+  main-is:
+    Main.hs
+
+  type:
+    exitcode-stdio-1.0
+
+  ghc-options:
+    -threaded -with-rtsopts=-N
+
+  hs-source-dirs:
+    test/Parser
+
+  build-depends:
+      Lambda-Parser
+    , base
+    , megaparsec
+        ^>= 7.0.5
+    , text
+        ^>=1.2.3
+
