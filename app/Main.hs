@@ -43,8 +43,14 @@ main = runInputT defaultSettings repl
                          mainLoop
                      Right expr ->
                        do
+                         outputStrLn $ ""
                          outputStrLn $ "Lambda Expression is: "
+                         outputStrLn $ ""
                          outputStrLn $ unpack $ printExpr 0 expr
+                         outputStrLn $ ""
+                         outputStrLn $ "The Tree representation is: "
+                         outputStrLn $ ""
+                         outputStrLn $ printAsTree expr
                          mainLoop
 
 
