@@ -96,7 +96,7 @@ leftBracket :: Parser ()
 leftBracket = void $ lexemeS (char ('('))
 
 rightBracket :: Parser ()
-rightBracket = void $ lexemeS (char (')'))
+rightBracket = void $ lexemeSomeWS (char (')'))
 
 bracketed :: Parser a -> Parser a
 bracketed p =
@@ -119,7 +119,7 @@ lam =
     lexemeS (char '\\')
     vars <- some ident
     lexemeS (char '.')
-    body <- (try app) <|> var
+    body <- parseExpr
     let lamExpr = foldr Lam body vars
     pure lamExpr
 
