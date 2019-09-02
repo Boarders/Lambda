@@ -7,11 +7,12 @@ module Untyped.PrettyPrint
   )
   where
 
-import Parser.Lambda.Untyped
 import Data.Foldable
 import Data.Text (unwords, Text, unpack)
 import Prelude hiding (unwords, replicate)
 import Data.Tree
+
+import Untyped.Expression
 
 printBlock :: Block -> Text
 printBlock (name, expr) =

@@ -5,7 +5,8 @@ import Data.Foldable
 import System.Console.ANSI
 import Control.Monad.IO.Class
 import Untyped.PrettyPrint
-import Parser.Lambda.Untyped
+import Untyped.Parser
+import Untyped.Expression
 import Text.Megaparsec
 import Data.Text (Text, unpack)
 import Data.Void

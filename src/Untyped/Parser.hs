@@ -4,7 +4,7 @@
 {-# LANGUAGE TypeFamilies         #-}
 {-# LANGUAGE OverloadedStrings    #-}
 
-module Parser.Lambda.Untyped where
+module Untyped.Parser where
 
 import Data.Text hiding (empty, foldr, foldl')
 import qualified Text.Megaparsec.Stream as MP
@@ -23,27 +23,11 @@ import Data.Char
 import Control.Applicative (liftA2)
 import Data.List (foldl')
 
-data Token
+import Untyped.Expression
 
-type Identifier = Text
-type Name  = Text
-type Program = [Block]
-type Block = (Identifier, Expression)
-data Expression =
-    Let [Block] Expression
-  | Var Name
-  | Lam Name Expression
-  | App Expression Expression
-  deriving Show
-
---  | App Expression Expression
 
 type Parser = Parsec Void Text
-type IgnoreParser     = Parser ()
-type TextParser       = Parser Text
-type ProgramParser    = Parser [Block]
-type BlockParser      = Parser  Block
-type ExpressionParser = Parser  Expression
+
 
 -- |
 -- This ignores spaces and tabs.
@@ -80,7 +64,7 @@ lexemeSomeWS = lexeme wSpaceSomeP
 lexemeWS :: Parser a -> Parser a
 lexemeWS = lexeme wSpaceP
 
-ident :: TextParser
+ident :: Parser Text
 ident = lexemeS (cons <$> lowerChar <*> takeWhileP Nothing (isAlphaNum))
 
 equals :: Parser ()

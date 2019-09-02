@@ -1,16 +1,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Parser.Lambda.Untyped
+import Untyped.Parser
 import Text.Megaparsec
 import Data.Text (Text, unlines)
 import Prelude hiding (unlines, putStrLn)
 import Data.Foldable
 import Data.Text.IO (putStrLn)
 
+
 main :: IO ()
 main = do
-  
+
   parseTestRun lamEx1 lam
   parseTestRun lamEx2 lam
   parseTestRun lamEx3 lam
