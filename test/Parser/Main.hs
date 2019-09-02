@@ -16,8 +16,10 @@ main = do
   parseTestRun lamEx3 lam
   parseTestRun lamEx4 lam
   parseTestRun lamEx5 lam
-  parseTestRun blockExample parseBlock
-  parseTestRun programExample parseProgram
+  parseTestRun lamEx6 parseExpr
+  parseTestRun varEx1 (bracketed app)
+--  parseTestRun blockExample parseBlock
+--  parseTestRun programExample parseProgram
 
 
 
@@ -41,6 +43,12 @@ lamEx4 = "\\x y . x y y"
 
 lamEx5 :: Text
 lamEx5 = "\\x y . x (y y)"
+
+lamEx6 :: Text
+lamEx6 = "\\x y . (x (x y))"
+
+varEx1 :: Text
+varEx1 = "(x y)"
 
 parseTestRun :: Show a => Text -> Parser a -> IO ()
 parseTestRun input parse = do
