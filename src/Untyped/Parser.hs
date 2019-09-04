@@ -7,16 +7,11 @@
 module Untyped.Parser where
 
 import Data.Text hiding (empty, foldr, foldl')
-import qualified Text.Megaparsec.Stream as MP
-import qualified Text.Megaparsec as MP
 import Text.Megaparsec hiding (sepEndBy1)
 import Data.Void
-import Text.Megaparsec.Char hiding (token)
-import Text.Megaparsec.Char.Lexer (lexeme, symbol)
+import Text.Megaparsec.Char
 import Text.Megaparsec.Char.Lexer as L
 import qualified Text.Megaparsec.Char as C
-import Data.Coerce
-import Text.Megaparsec.Debug (dbg)
 import Prelude hiding (unlines)
 import Control.Monad (void)
 import Data.Char
@@ -100,9 +95,9 @@ var = Var <$> ident
 lam :: Parser Expression
 lam =
   do
-    lexemeS (char '\\')
+    void $ lexemeS (char '\\')
     vars <- some ident
-    lexemeS (char '.')
+    void $ lexemeS (char '.')
     body <- parseExpr
     let lamExpr = foldr Lam body vars
     pure lamExpr
@@ -127,7 +122,7 @@ letBlock =
     leftCurly
     vals <- sepBy1 (parseDefinition <* optional (some space1)) (lexemeWS (char ';'))
     rightCurly
-    optional $ keyword "in"
+    _ <- optional $ keyword "in"
     pure vals
 
 
