@@ -4,6 +4,7 @@ import System.Console.Haskeline
 import Data.Foldable
 import System.Console.ANSI
 import Control.Monad.IO.Class
+import Untyped.Combinators
 import Untyped.PrettyPrint
 import Untyped.Parser
 import Untyped.Expression
@@ -11,6 +12,7 @@ import Text.Megaparsec
 import Data.Text (Text, unpack)
 import Data.Void
 import Data.String (fromString)
+
 
 
 main :: IO ()
@@ -44,20 +46,34 @@ main = runInputT defaultSettings repl
                          mainLoop
                      Right expr ->
                        do
-                         outputStrLn $ ""
-                         outputStrLn $ "Lambda Expression is: "
-                         outputStrLn $ ""
-                         outputStrLn $ unpack $ printExpr 0 expr
-                         outputStrLn $ ""
-                         outputStrLn $ "The Tree representation is: "
-                         outputStrLn $ ""
-                         outputStrLn $ printAsTree expr
+                         expressionOutput expr
                          mainLoop
 
 
 parseInput :: String -> Either (ParseErrorBundle Text Void) Expression
 parseInput inp = parse parseExpr "" (fromString inp)
 
+
+outputWithSpace :: String -> InputT IO ()
+outputWithSpace str =
+  do
+    outputStrLn $ mempty
+    outputStrLn $ str
+    outputStrLn $ mempty
+
+expressionOutput :: Expression -> InputT IO ()
+expressionOutput e
+  = traverse_ outputWithSpace (outputContent e)
+
+outputContent :: Expression -> [String]
+outputContent e =
+  [ "Lambda Expression is: "
+  , unpack $ printExpr 0 e
+  , "The Tree representation is: "
+  , printAsTree e
+  , "The SKI term is: "
+  , printSKI (toSKIRep e)
+  ]
 
 drawBirdie :: InputT IO ()
 drawBirdie =
