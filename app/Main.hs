@@ -16,7 +16,7 @@ import Data.String (fromString)
 
 
 main :: IO ()
-main = runInputT defaultSettings repl
+main = runInputT pigeSettings repl
    where
        repl :: InputT IO ()
        repl = header >> mainLoop
@@ -52,6 +52,14 @@ main = runInputT defaultSettings repl
 
 parseInput :: String -> Either (ParseErrorBundle Text Void) Expression
 parseInput inp = parse parseExpr "" (fromString inp)
+
+
+pigeSettings :: MonadIO m => Settings m
+pigeSettings = Settings
+  { complete       = completeFilename
+  , historyFile    = Just ".pige-playground"
+  , autoAddHistory = True
+  }
 
 
 outputWithSpace :: String -> InputT IO ()
