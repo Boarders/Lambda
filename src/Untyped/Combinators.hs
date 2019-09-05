@@ -22,7 +22,7 @@ freeVars (SKIApp l r)  = (freeVars l) `union` (freeVars r)
 freeVars (SKI _)     = mempty
 
 toSKIRep :: (Ord a) => ExpressionF a -> SKIExpression a
-toSKIRep = elimBoundVars . toSKI
+toSKIRep = eliminateBoundVars . toSKI
 
 -- TODO : let expressions
 printSKI :: (Show a) => SKIExpression a -> String
@@ -30,7 +30,6 @@ printSKI (SKIVar v)      = show v
 printSKI (SKILam b body) = unwords ["λ", show b , "→ ", printSKI body]
 printSKI (SKIApp l r)    = unwords ["(" <> printSKI l, printSKI r <> ")"]
 printSKI (SKI ski) = show ski
-
 
 
 elimBoundVars :: (Ord a) => SKIExpression a -> SKIExpression a
@@ -55,16 +54,13 @@ abstract :: (Eq a) => a -> SKIExpression a -> SKIExpression a
 abstract var (SKIVar name)
   | var == name = SKI I
   | otherwise   = SKIApp (SKI K) (SKIVar name)
-abstract var (SKIApp l r) = SKIApp (abstract var l) (abstract var r)
-abstract var (SKILam v body)
-  | var == v  = abstract var body
-  | otherwise = SKILam var (abstract var body)
-abstract _ ski@(SKI _) = ski
+abstract var (SKIApp l r) = SKIApp (SKIApp (SKI S) (abstract var l)) (abstract var r)
+abstract _ ski = SKIApp (SKI K) ski
 
 
 eliminateBoundVars :: (Eq a) => SKIExpression a -> SKIExpression a
 eliminateBoundVars = \case
-  SKILam a body -> eliminateBoundVars (abstract a body)
+  SKILam a body -> abstract a (eliminateBoundVars body)
   SKIApp l r    -> SKIApp (eliminateBoundVars l) (eliminateBoundVars r)
   expression    -> expression
   
