@@ -149,7 +149,7 @@ parseBlock =
     sLine  <- parseExpr
     case lBlock of
       Nothing -> pure (lhs, sLine)
-      Just lb -> pure (lhs, Let lb sLine)
+      Just lb -> error ("to do when we add let expr" <> show lb) -- pure (lhs, Let lb sLine)
 
 
 parseDecl :: Parser a -> Parser (Identifier, a)

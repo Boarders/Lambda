@@ -4,6 +4,7 @@
 module Untyped.Combinators where
 
 import Untyped.Expression
+
 import Data.Set
 
 data SKI = S | K | I
@@ -47,7 +48,7 @@ toSKI :: ExpressionF a -> SKIExpression a
 toSKI (Var v)   = (SKIVar v)
 toSKI (App l r) = SKIApp (toSKI l) (toSKI r)
 toSKI (Lam b f) = SKILam b (toSKI f)
-toSKI (Let _ _) = error "to do: let expressions"
+
   
 
 abstract :: (Eq a) => a -> SKIExpression a -> SKIExpression a

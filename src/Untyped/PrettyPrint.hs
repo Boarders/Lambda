@@ -27,7 +27,7 @@ printExpr :: Int -> Expression -> Text
 printExpr _ =
     \case
       Var v -> v
-      Let l body -> error $ "to do" <> show l <> show body
+--      Let l body -> error $ "to do" <> show l <> show body
       App l r -> unwords ["(" <>printExpr 0 l, printExpr 0 r <> ")"]
       Lam name body ->
         let
@@ -51,7 +51,7 @@ toTree = unfoldTree go
         Var v -> (unpack v, [])
         App l r  -> ("┐", [l, r])
         Lam name body -> ("λ " <> unpack name, [body])
-        Let _ _ -> error "to do"
+ --       Let _ _ -> error "to do"
 
 
 printAsTree :: Expression -> String
